@@ -1,1 +1,0 @@
-# symfony-rest-api-vuejs
