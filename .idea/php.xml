@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpIncludePathManager">
+    <include_path>
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/doctrine-migrations-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/migrations" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/inflector" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/annotations" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/persistence" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/willdurand/jsonp-callback-validator" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/collections" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/willdurand/negotiation" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/doctrine-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/sql-formatter" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/orm" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/cache" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/dbal" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/friendsofsymfony/rest-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/instantiator" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/event-manager" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/deprecations" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/lexer" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/dotenv" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/yaml" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/string" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/service-contracts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/http-kernel" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-php81" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/framework-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/psr/container" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/event-dispatcher" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/psr/log" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/flex" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/psr/cache" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/password-hasher" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/console" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/maker-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-php73" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-code" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-zendframework-bridge" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/error-handler" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-eventmanager" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/filesystem" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/proxy-manager-bridge" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/config" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/dependency-injection" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/cache" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/doctrine-bridge" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-intl-grapheme" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-intl-normalizer" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/security-core" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/var-exporter" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/routing" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/runtime" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/deprecation-contracts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/finder" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/cache-contracts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/friendsofphp/proxy-manager-lts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/jms/serializer" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/jms/serializer-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/phpstan/phpdoc-parser" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/composer" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/common" />
+    </include_path>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
+</project>
