@@ -43,9 +43,7 @@
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/polyfill-php73" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-code" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/event-dispatcher-contracts" />
-      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-zendframework-bridge" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/error-handler" />
-      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/laminas/laminas-eventmanager" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/filesystem" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/proxy-manager-bridge" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/config" />
@@ -70,6 +68,26 @@
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/phpstan/phpdoc-parser" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/composer" />
       <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/translation-contracts" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/twig-bridge" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/security-http" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/twig-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/security-csrf" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/property-info" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/apache-pack" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/serializer" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/property-access" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/security-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/validator" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/symfony/security-guard" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/lexik/jwt-authentication-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/stella-maris/clock" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/twig/extra-bundle" />
+      <path value="$PROJECT_DIR$/symfony-5-rest-api/vendor/twig/twig" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
