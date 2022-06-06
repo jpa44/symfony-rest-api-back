@@ -8,14 +8,37 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class UserController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(
+        private Security $security,
+        private SerializerInterface $serializer,
+        private UserPasswordEncoderInterface $passwordEncoder
+    ) {}
 
-    #[Route('/api/v1/user', name: 'get_user', methods: ['GET'])]
+    #[Route('/api/user', name: 'get_user', methods: ['GET'])]
+    public function index(): JsonResponse
+    {
+        $currentUser = $this->security->getUser();
+        if (!$currentUser) {
+            // the user must be logged in; if not, deny access
+            return $this->json([
+                'message' => 'You must be logged in to access this page.',
+            ], 401);
+        }
+
+        $user = $this->serializer->serialize($currentUser, 'json');
+
+        return $this->json($user);
+    }
+
+    #[Route('/api/users', name: 'get_users', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
-    public function index(ManagerRegistry $doctrine): JsonResponse
+    public function list(ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
 
@@ -27,23 +50,23 @@ class UserController extends AbstractController
             $data[] = [
                 'id' => $user->getId(),
                 'firstName' => $user->getFirstName(),
+                'roles' => $user->getRoles(),
                 'email' => $user->getEmail(),
-                'password' => $user->getPassword(),
             ];
         }
 
         return $this->json($data);
     }
 
-    #[Route('/api/v1/user', name: 'post_user', methods: ['POST'])]
+    #[Route('/api/user', name: 'post_user', methods: ['POST'])]
     public function new(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
 
         $user = new User();
         $user->setEmail($request->request->get('email'));
-        $user->setPassword($request->request->get('password'));
-        $user->setRoles(['ROLE_USER']);
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $request->request->get('password')));
+        $user->setRoles($request->request->get('roles'));
         $user->setFirstName($request->request->get('firstName'));
 
         $entityManager->persist($user);
@@ -53,14 +76,13 @@ class UserController extends AbstractController
         $data = [
             'id' => $user->getId(),
             'firstName' => $user->getFirstName(),
-            'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
+            'email' => $user->getEmail()
         ];
 
         return $this->json($data);
     }
 
-    #[Route('/api/v1/user/{id}', name: 'show_user', methods: ['GET'])]
+    #[Route('/api/user/{id}', name: 'show_user', methods: ['GET'])]
     public function show(int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -83,7 +105,7 @@ class UserController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/user/{id}', name: 'edit_user', methods: ['PATCH'])]
+    #[Route('/api/user/{id}', name: 'edit_user', methods: ['PATCH'])]
     public function edit(Request $request, int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -106,7 +128,7 @@ class UserController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/user/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[Route('/api/user/{id}', name: 'delete_user', methods: ['DELETE'])]
     public function delete(int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();

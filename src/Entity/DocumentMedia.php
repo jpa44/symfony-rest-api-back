@@ -16,6 +16,9 @@ class DocumentMedia
     #[ORM\ManyToOne(targetEntity: Document::class, inversedBy: 'media')]
     private $document;
 
+    #[ORM\Column(nullable: true)]
+    public ?string $filePath = null;
+
     public function getId(): ?int
     {
         return $this->id;

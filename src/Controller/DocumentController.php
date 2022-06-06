@@ -7,13 +7,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Document;
+use App\Entity\DocumentType;
+use App\Entity\DocumentMedia;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\FileUploader;
 
 class DocumentController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine) {}
 
-    #[Route('/api/v1/document', name: 'get_document', methods: ['GET'])]
+    #[Route('/api/document', name: 'get_document', methods: ['GET'])]
     public function index(ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -36,16 +39,31 @@ class DocumentController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document', name: 'post_document', methods: ['POST'])]
-    public function new(Request $request, ManagerRegistry $doctrine): JsonResponse
+    #[Route('/api/document', name: 'post_document', methods: ['POST'])]
+    public function new(Request $request, ManagerRegistry $doctrine, FileUploader $fileUploader): JsonResponse
     {
         $entityManager = $doctrine->getManager();
+
+        $documentType = $entityManager
+            ->getRepository(DocumentType::class)
+            ->find($request->request->get('documentType'));
+
+        if (!$documentType) {
+            return $this->json('No document type found for id' . $request->request->get('documentType'), 404);
+        }
 
         $document = new Document();
         $document->setTitle($request->request->get('title'));
         $document->setDescription($request->request->get('description'));
+        $document->setDocumentType($documentType);
         $document->setCreatedAt(new \DateTime());
-        //$document->setDocumentType(['ROLE_USER']);
+
+        $uploadedFile = $request->files->get('file');
+        if($uploadedFile){
+            $mediaObject = new DocumentMedia();
+            $mediaObject->filePath = $fileUploader->upload($uploadedFile);
+            $document->setMedia($mediaObject);
+        }
 
         $entityManager->persist($document);
 
@@ -63,7 +81,7 @@ class DocumentController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document/{id}', name: 'show_document', methods: ['GET'])]
+    #[Route('/api/document/{id}', name: 'show_document', methods: ['GET'])]
     public function show(int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -88,7 +106,7 @@ class DocumentController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document/{id}', name: 'edit_document', methods: ['PATCH'])]
+    #[Route('/api/document/{id}', name: 'edit_document', methods: ['PATCH'])]
     public function edit(Request $request, int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -98,8 +116,17 @@ class DocumentController extends AbstractController
             return $this->json('No document found for id' . $id, 404);
         }
 
-        $document->setRoles(['ROLE_USER']);
-        $document->setFirstName($request->request->get('firstName'));
+        $documentType = $entityManager
+            ->getRepository(DocumentType::class)
+            ->find($request->request->get('documentType'));
+
+        if (!$documentType) {
+            return $this->json('No document type found for id' . $request->request->get('documentType'), 404);
+        }
+
+        $document->setTitle($request->request->get('title'));
+        $document->setDescription($request->request->get('description'));
+        $document->setDocumentType($documentType);
         $entityManager->flush();
 
         $data = [
@@ -114,7 +141,7 @@ class DocumentController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document/{id}', name: 'delete_document', methods: ['DELETE'])]
+    #[Route('/api/document/{id}', name: 'delete_document', methods: ['DELETE'])]
     public function delete(int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();

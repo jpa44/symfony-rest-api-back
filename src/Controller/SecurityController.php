@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -43,14 +44,27 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/api/register', name: 'api_register', methods: ['POST'])]
-    public function register(Request $request): JsonResponse
+    public function register(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
-        $jsonData = json_decode($request->getContent());
-        $user = $this->userRepository->create($jsonData);
+        $entityManager = $doctrine->getManager();
 
-        return new JsonResponse([
-            'user' => $this->serializer->serialize($user, 'json')
-        ], 201);
+        $user = new User();
+        $user->setEmail($request->request->get('email'));
+        $user->setPassword();
+        $user->setRoles(['ROLE_USER']);
+        $user->setFirstName($request->request->get('firstName'));
+
+        $entityManager->persist($user);
+
+        $entityManager->flush();
+
+        $token = $this->security->getUser()->getToken();
+
+        $data = [
+            'token' => $token
+        ];
+
+        return $this->json($data);
 
     }
 

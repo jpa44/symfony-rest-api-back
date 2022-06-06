@@ -13,7 +13,7 @@ class DocumentTypeController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine) {}
 
-    #[Route('/api/v1/document/type', name: 'get_document_type', methods: ['GET'])]
+    #[Route('/api/document_type', name: 'get_document_type', methods: ['GET'])]
     public function index(ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -32,7 +32,8 @@ class DocumentTypeController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document/type', name: 'post_document_type', methods: ['POST'])]
+    #[Route('/api/document_type', name: 'post_document_type', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
@@ -52,49 +53,8 @@ class DocumentTypeController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/v1/document/type/{id}', name: 'show_document_type', methods: ['GET'])]
-    public function show(int $id, ManagerRegistry $doctrine): JsonResponse
-    {
-        $entityManager = $doctrine->getManager();
-
-        $documentType = $entityManager
-            ->getRepository(DocumentType::class)
-            ->find($id);
-
-        if (!$documentType) {
-            return $this->json('No document type found for id' . $id, 404);
-        }
-
-        $data = [
-            'id' => $documentType->getId(),
-            'name' => $documentType->getName()
-        ];
-
-        return $this->json($data);
-    }
-
-    #[Route('/api/v1/document/type/{id}', name: 'edit_document_type', methods: ['PATCH'])]
-    public function edit(Request $request, int $id, ManagerRegistry $doctrine): JsonResponse
-    {
-        $entityManager = $doctrine->getManager();
-        $documentType = $entityManager->getRepository(DocumentType::class)->find($id);
-
-        if (!$documentType) {
-            return $this->json('No document found for id' . $id, 404);
-        }
-
-        $documentType->setName($request->request->get('name'));
-        $entityManager->flush();
-
-        $data = [
-            'id' => $documentType->getId(),
-            'name' => $documentType->getName()
-        ];
-
-        return $this->json($data);
-    }
-
-    #[Route('/api/v1/document/type/{id}', name: 'delete_document_type', methods: ['DELETE'])]
+    #[Route('/api/document_type/{id}', name: 'delete_document_type', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id, ManagerRegistry $doctrine): JsonResponse
     {
         $entityManager = $doctrine->getManager();
