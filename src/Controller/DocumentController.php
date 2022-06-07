@@ -25,7 +25,7 @@ class DocumentController extends AbstractController
         $user = $this->getUser();
         $entityManager = $doctrine->getManager();
 
-        if($user->getRoles() == 'ROLE_ADMIN') {
+        if(in_array('ROLE_ADMIN', $user->getRoles())) {
             $documents = $entityManager->getRepository(Document::class)->findAll();
         }else{
             //TODO: find by DocumentRule
