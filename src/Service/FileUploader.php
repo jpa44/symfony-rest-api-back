@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\UrlHelper;
 
@@ -53,5 +55,16 @@ class FileUploader
         }
 
         return $this->urlHelper->getRelativePath($this->relativeUploadsDir.$fileName);
+    }
+
+    public function download(string $fileName): BinaryFileResponse
+    {
+        $filePath = $this->getUploadPath().'/'.$fileName;
+
+        if (!file_exists($filePath)) {
+            throw new FileException('File not found');
+        }
+
+        return new BinaryFileResponse($filePath);
     }
 }

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends AbstractController
 {
@@ -30,7 +31,7 @@ class UserController extends AbstractController
             // the user must be logged in; if not, deny access
             return $this->json([
                 'message' => 'You must be logged in to access this page.',
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         $data = [
@@ -50,7 +51,7 @@ class UserController extends AbstractController
         try{
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }catch (\Exception $e){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
         $entityManager = $doctrine->getManager();
@@ -78,7 +79,7 @@ class UserController extends AbstractController
         try{
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }catch (\Exception $e){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
         $entityManager = $doctrine->getManager();
@@ -109,14 +110,14 @@ class UserController extends AbstractController
         try{
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
         }catch (\Exception $e){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
         $entityManager = $doctrine->getManager();
         $user = $entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
-            return $this->json('No user found for id' . $id, 404);
+            return $this->json('No user found for id' . $id, Response::HTTP_NOT_FOUND);
         }
 
         $entityManager->remove($user);
