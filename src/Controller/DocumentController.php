@@ -144,7 +144,7 @@ class DocumentController extends AbstractController
 
         $user = $this->getUser();
 
-        if($user->getId() !== $document->getUser()->getId()){
+        if($user->getId() !== $document->getUser()->getId() && !in_array('ROLE_ADMIN', $user->getRoles())){
             return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -177,7 +177,7 @@ class DocumentController extends AbstractController
 
         $user = $this->getUser();
 
-        if($user->getId() !== $document->getUser()->getId()){
+        if($user->getId() !== $document->getUser()->getId() && !in_array('ROLE_ADMIN', $user->getRoles())){
             return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
