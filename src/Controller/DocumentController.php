@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Entity\Document;
@@ -16,11 +17,6 @@ class DocumentController extends AbstractController
 {
     public function __construct(private ManagerRegistry $doctrine)
     {
-        try{
-            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-        }catch (\Exception $e){
-            return $this->json('Access denied', 400);
-        }
     }
 
     #[Route('/api/document', name: 'get_document', methods: ['GET'])]
@@ -29,9 +25,10 @@ class DocumentController extends AbstractController
         $user = $this->getUser();
         $entityManager = $doctrine->getManager();
 
-        if($user->getRole() == 'ROLE_ADMIN') {
+        if($user->getRoles() == 'ROLE_ADMIN') {
             $documents = $entityManager->getRepository(Document::class)->findAll();
         }else{
+            //TODO: find by DocumentRule
             $documents = $entityManager->getRepository(Document::class)->findBy(['user' => $user]);
         }
       
@@ -48,7 +45,7 @@ class DocumentController extends AbstractController
             ];
         }
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 
     #[Route('/api/document', name: 'post_document', methods: ['POST'])]
@@ -61,7 +58,7 @@ class DocumentController extends AbstractController
             ->find($request->request->get('documentType'));
 
         if (!$documentType) {
-            return $this->json('No document type found for id' . $request->request->get('documentType'), 404);
+            return $this->json('No document type found for id' . $request->request->get('documentType'), Response::HTTP_NOT_FOUND);
         }
 
         $document = new Document();
@@ -69,12 +66,14 @@ class DocumentController extends AbstractController
         $document->setDescription($request->request->get('description'));
         $document->setDocumentType($documentType);
         $document->setCreatedAt(new \DateTime());
+        $document->setUser($this->getUser());
 
         $uploadedFile = $request->files->get('file');
         if ($uploadedFile) {
             $mediaObject = new DocumentMedia();
             $mediaObject->filePath = $fileUploader->upload($uploadedFile);
-            $document->setMedia($mediaObject);
+            $mediaObject->setDocument($document);
+            $entityManager->persist($mediaObject);
         }
 
         $entityManager->persist($document);
@@ -90,7 +89,7 @@ class DocumentController extends AbstractController
             'createdAt' => $document->getCreatedAt()
         ];
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_CREATED);
     }
 
     #[Route('/api/document/{id}', name: 'show_document', methods: ['GET'])]
@@ -103,13 +102,13 @@ class DocumentController extends AbstractController
             ->find($id);
 
         if (!$document) {
-            return $this->json('No document found for id' . $id, 404);
+            return $this->json('No document found for id' . $id, Response::HTTP_NOT_FOUND);
         }
 
         $user = $this->getUser();
 
         if($user->getId() !== $document->getUser()->getId()){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
 
@@ -122,7 +121,7 @@ class DocumentController extends AbstractController
             'createdAt' => $document->getCreatedAt()
         ];
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 
     #[Route('/api/document/{id}', name: 'edit_document', methods: ['PATCH'])]
@@ -132,7 +131,7 @@ class DocumentController extends AbstractController
         $document = $entityManager->getRepository(Document::class)->find($id);
 
         if (!$document) {
-            return $this->json('No document found for id' . $id, 404);
+            return $this->json('No document found for id' . $id, Response::HTTP_NOT_FOUND);
         }
 
         $documentType = $entityManager
@@ -140,13 +139,13 @@ class DocumentController extends AbstractController
             ->find($request->request->get('documentType'));
 
         if (!$documentType) {
-            return $this->json('No document type found for id' . $request->request->get('documentType'), 404);
+            return $this->json('No document type found for id' . $request->request->get('documentType'), Response::HTTP_NOT_FOUND);
         }
 
         $user = $this->getUser();
 
         if($user->getId() !== $document->getUser()->getId()){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
         $document->setTitle($request->request->get('title'));
@@ -163,7 +162,7 @@ class DocumentController extends AbstractController
             'createdAt' => $document->getCreatedAt()
         ];
 
-        return $this->json($data);
+        return $this->json($data, Response::HTTP_OK);
     }
 
     #[Route('/api/document/{id}', name: 'delete_document', methods: ['DELETE'])]
@@ -173,18 +172,18 @@ class DocumentController extends AbstractController
         $document = $entityManager->getRepository(Document::class)->find($id);
 
         if (!$document) {
-            return $this->json('No document found for id' . $id, 404);
+            return $this->json('No document found for id' . $id, Response::HTTP_NOT_FOUND);
         }
 
         $user = $this->getUser();
 
         if($user->getId() !== $document->getUser()->getId()){
-            return $this->json('Access denied', 400);
+            return $this->json('Access denied', Response::HTTP_UNAUTHORIZED);
         }
 
         $entityManager->remove($document);
         $entityManager->flush();
 
-        return $this->json('Deleted a document successfully with id ' . $id);
+        return $this->json('Deleted a document successfully with id ' . $id, Response::HTTP_OK);
     }
 }

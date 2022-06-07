@@ -28,11 +28,15 @@ class Document
     #[ORM\JoinColumn(nullable: false)]
     private $DocumentType;
 
-    #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentMedia::class)]
-    private $media;
-
     #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentRule::class)]
     private $documentRule;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'documents')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentMedia::class, orphanRemoval: true)]
+    private $media;
 
     public function __construct()
     {
@@ -93,35 +97,6 @@ class Document
         return $this;
     }
 
-    /**
-     * @return Collection<int, DocumentMedia>
-     */
-    public function getMedia(): Collection
-    {
-        return $this->media;
-    }
-
-    public function addMedium(DocumentMedia $medium): self
-    {
-        if (!$this->media->contains($medium)) {
-            $this->media[] = $medium;
-            $medium->setDocument($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedium(DocumentMedia $medium): self
-    {
-        if ($this->media->removeElement($medium)) {
-            // set the owning side to null (unless already changed)
-            if ($medium->getDocument() === $this) {
-                $medium->setDocument(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, DocumentRule>
@@ -147,6 +122,48 @@ class Document
             // set the owning side to null (unless already changed)
             if ($documentRule->getDocument() === $this) {
                 $documentRule->setDocument(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentMedia>
+     */
+    public function getMedia(): Collection
+    {
+        return $this->media;
+    }
+
+    public function addMedium(DocumentMedia $medium): self
+    {
+        if (!$this->media->contains($medium)) {
+            $this->media[] = $medium;
+            $medium->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMedium(DocumentMedia $medium): self
+    {
+        if ($this->media->removeElement($medium)) {
+            // set the owning side to null (unless already changed)
+            if ($medium->getDocument() === $this) {
+                $medium->setDocument(null);
             }
         }
 

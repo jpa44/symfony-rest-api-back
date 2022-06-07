@@ -33,9 +33,14 @@ class UserController extends AbstractController
             ], 401);
         }
 
-        $user = $this->serializer->serialize($currentUser, 'json');
+        $data = [
+            'id' => $currentUser->getId(),
+            'firstName' => $currentUser->getFirstName(),
+            'roles' => $currentUser->getRoles(),
+            'email' => $currentUser->getEmail(),
+        ];
 
-        return $this->json($user);
+        return $this->json($data);
     }
 
     #[Route('/api/users', name: 'get_users', methods: ['GET'])]

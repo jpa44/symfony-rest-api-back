@@ -31,7 +31,7 @@ class FileUploader
         $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
 
         try {
-            $file->move($this->getuploadPath(), $fileName);
+            $file->move($this->getUploadPath(), $fileName);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
@@ -39,7 +39,7 @@ class FileUploader
         return $fileName;
     }
 
-    public function getuploadPath()
+    public function getUploadPath()
     {
         return $this->uploadPath;
     }

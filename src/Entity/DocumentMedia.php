@@ -13,11 +13,12 @@ class DocumentMedia
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: Document::class, inversedBy: 'media')]
-    private $document;
-
     #[ORM\Column(nullable: true)]
     public ?string $filePath = null;
+
+    #[ORM\ManyToOne(targetEntity: Document::class, inversedBy: 'media')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $document;
 
     public function getId(): ?int
     {
@@ -35,4 +36,5 @@ class DocumentMedia
 
         return $this;
     }
+
 }
