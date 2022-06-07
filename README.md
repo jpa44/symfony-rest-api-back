@@ -34,6 +34,8 @@ clears and warmup/refresh cache
 
 ### Entities
 
+![Entities](https://fathomless-retreat-31414.herokuapp.com/entities.png)
+
 ---
 
 ### JWT token
