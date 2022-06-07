@@ -31,9 +31,13 @@ class Document
     #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentMedia::class)]
     private $media;
 
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: DocumentRule::class)]
+    private $documentRule;
+
     public function __construct()
     {
         $this->media = new ArrayCollection();
+        $this->documentRule = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +117,36 @@ class Document
             // set the owning side to null (unless already changed)
             if ($medium->getDocument() === $this) {
                 $medium->setDocument(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DocumentRule>
+     */
+    public function getDocumentRule(): Collection
+    {
+        return $this->documentRule;
+    }
+
+    public function addDocumentRule(DocumentRule $documentRule): self
+    {
+        if (!$this->documentRule->contains($documentRule)) {
+            $this->documentRule[] = $documentRule;
+            $documentRule->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocumentRule(DocumentRule $documentRule): self
+    {
+        if ($this->documentRule->removeElement($documentRule)) {
+            // set the owning side to null (unless already changed)
+            if ($documentRule->getDocument() === $this) {
+                $documentRule->setDocument(null);
             }
         }
 

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use App\Repository\UserRepository;
 use App\Entity\User;
@@ -19,9 +20,11 @@ use App\Entity\User;
 class SecurityController extends AbstractController
 {
 
-    public function __construct(private UserRepository $userRepository,
-                                private Security $security,
-                                private SerializerInterface $serializer)
+    public function __construct(private UserRepository               $userRepository,
+                                private Security                     $security,
+                                private SerializerInterface          $serializer,
+                                private UserPasswordEncoderInterface $passwordEncoder
+    )
     {
     }
 
@@ -50,22 +53,14 @@ class SecurityController extends AbstractController
 
         $user = new User();
         $user->setEmail($request->request->get('email'));
-        $user->setPassword();
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $request->request->get('password')));
         $user->setRoles(['ROLE_USER']);
         $user->setFirstName($request->request->get('firstName'));
 
         $entityManager->persist($user);
-
         $entityManager->flush();
 
-        $token = $this->security->getUser()->getToken();
-
-        $data = [
-            'token' => $token
-        ];
-
-        return $this->json($data);
-
+        return $this->json($user);
     }
 
     /**

@@ -27,8 +27,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 255)]
     private $firstName;
 
-    #[ORM\ManyToOne(targetEntity: DocumentRule::class, inversedBy: 'User')]
+    #[ORM\ManyToOne(targetEntity: DocumentRule::class, inversedBy: 'userRole')]
     private $documentRule;
+
 
     public function getId(): ?int
     {
@@ -124,6 +125,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
+    }
+
     public function getDocumentRule(): ?DocumentRule
     {
         return $this->documentRule;
@@ -134,10 +140,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->documentRule = $documentRule;
 
         return $this;
-    }
-
-    public function getUsername()
-    {
-        // TODO: Implement getUsername() method.
     }
 }

@@ -15,10 +15,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class UserController extends AbstractController
 {
     public function __construct(
-        private Security $security,
-        private SerializerInterface $serializer,
+        private Security                     $security,
+        private SerializerInterface          $serializer,
         private UserPasswordEncoderInterface $passwordEncoder
-    ) {}
+    )
+    {
+    }
 
     #[Route('/api/user', name: 'get_user', methods: ['GET'])]
     public function index(): JsonResponse
@@ -40,6 +42,12 @@ class UserController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function list(ManagerRegistry $doctrine): JsonResponse
     {
+        try{
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }catch (\Exception $e){
+            return $this->json('Access denied', 400);
+        }
+
         $entityManager = $doctrine->getManager();
 
         $users = $entityManager->getRepository(User::class)->findAll();
@@ -59,8 +67,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/api/user', name: 'post_user', methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        try{
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }catch (\Exception $e){
+            return $this->json('Access denied', 400);
+        }
+
         $entityManager = $doctrine->getManager();
 
         $user = new User();
@@ -82,55 +97,16 @@ class UserController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/api/user/{id}', name: 'show_user', methods: ['GET'])]
-    public function show(int $id, ManagerRegistry $doctrine): JsonResponse
-    {
-        $entityManager = $doctrine->getManager();
-
-        $user = $entityManager
-            ->getRepository(User::class)
-            ->find($id);
-
-        if (!$user) {
-            return $this->json('No user found for id' . $id, 404);
-        }
-
-        $data = [
-            'id' => $user->getId(),
-            'firstName' => $user->getFirstName(),
-            'email' => $user->getEmail(),
-            'password' => $user->getPassword(),
-        ];
-
-        return $this->json($data);
-    }
-
-    #[Route('/api/user/{id}', name: 'edit_user', methods: ['PATCH'])]
-    public function edit(Request $request, int $id, ManagerRegistry $doctrine): JsonResponse
-    {
-        $entityManager = $doctrine->getManager();
-        $user = $entityManager->getRepository(User::class)->find($id);
-
-        if (!$user) {
-            return $this->json('No user found for id' . $id, 404);
-        }
-
-        $user->setRoles(['ROLE_USER']);
-        $user->setFirstName($request->request->get('firstName'));
-        $entityManager->flush();
-
-        $data = [
-            'id' => $user->getId(),
-            'firstName' => $user->getFirstName(),
-            'email' => $user->getEmail(),
-        ];
-
-        return $this->json($data);
-    }
-
     #[Route('/api/user/{id}', name: 'delete_user', methods: ['DELETE'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id, ManagerRegistry $doctrine): JsonResponse
     {
+        try{
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }catch (\Exception $e){
+            return $this->json('Access denied', 400);
+        }
+
         $entityManager = $doctrine->getManager();
         $user = $entityManager->getRepository(User::class)->find($id);
 

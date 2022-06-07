@@ -11,7 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DocumentTypeController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $doctrine) {}
+    public function __construct(private ManagerRegistry $doctrine)
+    {
+    }
 
     #[Route('/api/document_type', name: 'get_document_type', methods: ['GET'])]
     public function index(ManagerRegistry $doctrine): JsonResponse
@@ -36,6 +38,12 @@ class DocumentTypeController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function new(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        try{
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }catch (\Exception $e){
+            return $this->json('Access denied', 400);
+        }
+
         $entityManager = $doctrine->getManager();
 
         $documentType = new DocumentType();
@@ -57,6 +65,12 @@ class DocumentTypeController extends AbstractController
     #[IsGranted('ROLE_ADMIN')]
     public function delete(int $id, ManagerRegistry $doctrine): JsonResponse
     {
+        try{
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        }catch (\Exception $e){
+            return $this->json('Access denied', 400);
+        }
+
         $entityManager = $doctrine->getManager();
         $documentType = $entityManager->getRepository(DocumentType::class)->find($id);
 

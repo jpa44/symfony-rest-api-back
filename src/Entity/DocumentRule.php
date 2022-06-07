@@ -24,9 +24,17 @@ class DocumentRule
     #[ORM\OneToMany(mappedBy: 'documentRule', targetEntity: User::class)]
     private $User;
 
+    #[ORM\OneToMany(mappedBy: 'document', targetEntity: User::class)]
+    private $userRole;
+
+    #[ORM\ManyToOne(targetEntity: Document::class, inversedBy: 'documentRule')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $document;
+
     public function __construct()
     {
         $this->User = new ArrayCollection();
+        $this->userRole = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,6 +92,48 @@ class DocumentRule
                 $user->setDocumentRule(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUserRole(): Collection
+    {
+        return $this->userRole;
+    }
+
+    public function addUserRole(User $userRole): self
+    {
+        if (!$this->userRole->contains($userRole)) {
+            $this->userRole[] = $userRole;
+            $userRole->setDocument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserRole(User $userRole): self
+    {
+        if ($this->userRole->removeElement($userRole)) {
+            // set the owning side to null (unless already changed)
+            if ($userRole->getDocument() === $this) {
+                $userRole->setDocument(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDocument(): ?Document
+    {
+        return $this->document;
+    }
+
+    public function setDocument(?Document $document): self
+    {
+        $this->document = $document;
 
         return $this;
     }

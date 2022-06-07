@@ -14,14 +14,14 @@ class FileUploader
     private $urlHelper;
     private $relativeUploadsDir;
 
-    public function __construct($publicPath, $uploadPath, SluggerInterface $slugger, UrlHelper $urlHelper)
+    public function __construct($privatePath, $uploadPath, SluggerInterface $slugger, UrlHelper $urlHelper)
     {
         $this->uploadPath = $uploadPath;
         $this->slugger = $slugger;
         $this->urlHelper = $urlHelper;
 
         // get uploads directory relative to public path //  "/uploads/"
-        $this->relativeUploadsDir = str_replace($publicPath, '', $this->uploadPath).'/';
+        $this->relativeUploadsDir = str_replace($privatePath, '', $this->uploadPath).'/';
     }
 
     public function upload(UploadedFile $file)
